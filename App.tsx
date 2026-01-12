@@ -19,13 +19,12 @@ interface Order {
   date: string;
 }
 
-// 10 PRODUITS PAR DEFAUT
+// CATALOGUE DE 9 PRODUITS (SAC À DOS SUPPRIMÉ)
 const INITIAL_PRODUCTS: Product[] = [
   { id: 1, name: "ORDINATEUR PORTABLE HP", price: 450000, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500" },
   { id: 2, name: "TELEPHONE SAMSUNG GALAXY", price: 350000, image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500" },
   { id: 3, name: "MONTRE CONNECTEE SPORT", price: 45000, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
   { id: 4, name: "CASQUE BLUETOOTH PRO", price: 25000, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-  { id: 5, name: "SAC A DOS VOYAGE", price: 15000, image: "https://images.unsplash.com/photo-1553062407-98eeb94c6a62?w=500" },
   { id: 6, name: "APPAREIL PHOTO REFLEX", price: 120000, image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500" },
   { id: 7, name: "CHAUSSURES DE SPORT", price: 30000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
   { id: 8, name: "TABLETTE GRAPHIQUE", price: 180000, image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500" },
@@ -55,17 +54,17 @@ export default function App() {
   const [newProdPrice, setNewProdPrice] = useState('');
   const [newProdImg, setNewProdImg] = useState('');
 
-  // Chargement LocalStorage
+  // Chargement LocalStorage (v6 pour forcer la mise à jour à 9 produits)
   useEffect(() => {
-    const savedProd = localStorage.getItem('yovo_products_v5');
+    const savedProd = localStorage.getItem('yovo_products_v6');
     if (savedProd) {
       setProducts(JSON.parse(savedProd));
     } else {
       setProducts(INITIAL_PRODUCTS);
-      localStorage.setItem('yovo_products_v5', JSON.stringify(INITIAL_PRODUCTS));
+      localStorage.setItem('yovo_products_v6', JSON.stringify(INITIAL_PRODUCTS));
     }
 
-    const savedOrd = localStorage.getItem('yovo_orders_v5');
+    const savedOrd = localStorage.getItem('yovo_orders_v6');
     if (savedOrd) setOrders(JSON.parse(savedOrd));
   }, []);
 
@@ -99,7 +98,7 @@ export default function App() {
 
     const updated = [...orders, newOrder];
     setOrders(updated);
-    localStorage.setItem('yovo_orders_v5', JSON.stringify(updated));
+    localStorage.setItem('yovo_orders_v6', JSON.stringify(updated));
     setCart([]);
     setView('success');
   };
@@ -118,7 +117,7 @@ export default function App() {
 
     const updated = [...products, p];
     setProducts(updated);
-    localStorage.setItem('yovo_products_v5', JSON.stringify(updated));
+    localStorage.setItem('yovo_products_v6', JSON.stringify(updated));
     setNewProdName(''); setNewProdPrice(''); setNewProdImg('');
     alert("Produit ajouté au stock !");
   };
@@ -127,7 +126,7 @@ export default function App() {
     if (confirm("Supprimer cet article ?")) {
       const updated = products.filter(p => p.id !== id);
       setProducts(updated);
-      localStorage.setItem('yovo_products_v5', JSON.stringify(updated));
+      localStorage.setItem('yovo_products_v6', JSON.stringify(updated));
     }
   };
 
