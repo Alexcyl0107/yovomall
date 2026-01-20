@@ -143,8 +143,6 @@ export default function App() {
       </nav>
 
       <main className="flex-grow container mx-auto p-3 md:p-8">
-        {/* L'overlay de chargement a été retiré ici pour satisfaire la demande */}
-
         {/* HOME VIEW */}
         {view === 'home' && (
           <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
@@ -285,36 +283,84 @@ export default function App() {
 
         {/* ADMIN DASHBOARD */}
         {view === 'admin' && (
-          <div className="max-w-6xl mx-auto space-y-6">
+          <div className="max-w-7xl mx-auto space-y-6">
             <div className="bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center border-b-8 border-red-600 gap-4">
               <div className="flex items-center gap-4">
-                <h2 className="font-black uppercase text-xs md:text-base italic">CONSOLE MONGODB</h2>
-                <span className="bg-green-500 text-black px-2 py-0.5 text-[10px] font-black rounded">ONLINE : {db.config.cluster}</span>
+                <h2 className="font-black uppercase text-xs md:text-base italic tracking-widest">CONSOLE MONGODB ADMIN</h2>
+                <span className="bg-green-500 text-black px-2 py-0.5 text-[10px] font-black rounded shadow-[0_0_10px_rgba(34,197,94,0.8)] animate-pulse">CLUSTER9 : ONLINE</span>
               </div>
-              <div className="text-[9px] font-mono text-gray-400 break-all md:max-w-xs">{db.config.uri.substring(0, 30)}...</div>
-              <button onClick={() => setView('home')} className="bg-red-600 px-4 py-1 font-black text-[8px] uppercase border border-white">QUITTER</button>
+              <button onClick={() => setView('home')} className="bg-red-600 px-6 py-1 font-black text-[10px] uppercase border-2 border-white hover:bg-white hover:text-red-600 transition-all">QUITTER</button>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border-4 border-black p-4">
-                <h3 className="font-black mb-3 underline uppercase text-sm">NOUVEL ARTICLE</h3>
-                <form onSubmit={addProduct} className="space-y-3">
-                  <input type="text" placeholder="NOM DU PRODUIT" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={newProdName} onChange={e => setNewProdName(e.target.value)} required />
-                  <input type="number" placeholder="PRIX (FCFA)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={newProdPrice} onChange={e => setNewProdPrice(e.target.value)} required />
-                  <input type="text" placeholder="LIEN IMAGE" className="w-full p-2 border-2 border-black font-black text-[10px]" value={newProdImg} onChange={e => setNewProdImg(e.target.value)} required />
-                  <button className="w-full bg-blue-600 text-white font-black py-2 uppercase border-b-4 border-blue-900 text-xs flex items-center justify-center gap-2">
-                    {loading ? "ENVOI EN COURS..." : "PUSH VERS CLOUD"}
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* COL 1: AJOUT PRODUIT */}
+              <div className="bg-white border-4 border-black p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="font-black mb-4 underline uppercase text-sm flex items-center gap-2">
+                  <span className="bg-black text-white w-6 h-6 flex items-center justify-center text-[10px]">01</span>
+                  NOUVEL ARTICLE
+                </h3>
+                <form onSubmit={addProduct} className="space-y-4">
+                  <input type="text" placeholder="NOM DU PRODUIT" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase bg-gray-50 focus:bg-white outline-none" value={newProdName} onChange={e => setNewProdName(e.target.value)} required />
+                  <input type="number" placeholder="PRIX (FCFA)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase bg-gray-50 focus:bg-white outline-none" value={newProdPrice} onChange={e => setNewProdPrice(e.target.value)} required />
+                  <input type="text" placeholder="URL DE L'IMAGE" className="w-full p-2 border-2 border-black font-black text-[10px] bg-gray-50 focus:bg-white outline-none" value={newProdImg} onChange={e => setNewProdImg(e.target.value)} required />
+                  <button className="w-full bg-blue-600 text-white font-black py-3 uppercase border-b-4 border-blue-900 text-[10px] flex items-center justify-center gap-2 hover:translate-y-0.5 active:translate-y-1 transition-all">
+                    {loading ? "TRANSMISSION..." : "ENVOYER AU CLOUD"}
                   </button>
                 </form>
               </div>
-              <div className="bg-white border-4 border-black p-4 h-64 overflow-y-auto">
-                <h3 className="font-black mb-3 underline uppercase text-sm">STOCK ACTUEL ({products.length})</h3>
-                {products.map(p => (
-                  <div key={`admin-prod-${p.id}`} className="flex justify-between items-center border-b py-2 text-[8px] font-black uppercase">
-                    <span className="truncate max-w-[70%]">{p.name}</span>
-                    <button onClick={() => deleteProduct(p.id)} className="bg-red-100 text-red-600 font-black border border-red-600 px-2 shrink-0">SUPPR</button>
-                  </div>
-                ))}
+
+              {/* COL 2: GESTION STOCK */}
+              <div className="bg-white border-4 border-black p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="font-black mb-4 underline uppercase text-sm flex items-center gap-2">
+                  <span className="bg-black text-white w-6 h-6 flex items-center justify-center text-[10px]">02</span>
+                  STOCK ({products.length})
+                </h3>
+                <div className="space-y-2 h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                  {products.map(p => (
+                    <div key={`admin-p-${p.id}`} className="flex justify-between items-center border-2 border-black p-2 text-[9px] font-black uppercase hover:bg-gray-100">
+                      <div className="flex items-center gap-2 overflow-hidden">
+                        <img src={p.image} className="w-8 h-8 border border-black object-cover" />
+                        <span className="truncate">{p.name}</span>
+                      </div>
+                      <button onClick={() => deleteProduct(p.id)} className="bg-red-600 text-white border border-black px-2 py-1 text-[8px] hover:bg-black transition-colors">DEL</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* COL 3: GESTION COMMANDES (IMPORTANT !) */}
+              <div className="bg-white border-4 border-black p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="font-black mb-4 underline uppercase text-sm flex items-center gap-2 text-red-600">
+                  <span className="bg-red-600 text-white w-6 h-6 flex items-center justify-center text-[10px]">03</span>
+                  COMMANDES REÇUES ({orders.length})
+                </h3>
+                <div className="space-y-4 h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                  {orders.length === 0 ? (
+                    <div className="text-center py-20 text-gray-300 font-black uppercase text-[10px]">Aucune vente cloud</div>
+                  ) : (
+                    orders.slice().reverse().map(o => (
+                      <div key={`admin-o-${o.id}`} className="border-2 border-black p-3 bg-yellow-50 relative group">
+                        <div className="flex justify-between items-start mb-2 border-b border-black pb-1">
+                          <span className="font-black text-[9px] uppercase tracking-tighter">CMD #{o.id.toString().slice(-6)}</span>
+                          <span className="bg-black text-white px-2 text-[8px] font-bold">{o.total.toLocaleString()} F</span>
+                        </div>
+                        <div className="text-[9px] font-bold space-y-1">
+                          <p className="text-red-600 uppercase">📞 {o.phone}</p>
+                          <p className="text-gray-600 line-clamp-2 italic uppercase">📍 {o.address}</p>
+                          <div className="bg-white border border-black p-1 mt-2 text-[8px]">
+                            {o.items.map((item, idx) => (
+                              <div key={idx} className="flex items-center gap-1">• {item}</div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-3 flex justify-between items-center text-[8px] font-black italic text-gray-400">
+                          <span>{o.date}</span>
+                          <span className="text-green-600 uppercase">Via {o.method}</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -323,19 +369,19 @@ export default function App() {
         {/* LOGIN ADMIN */}
         {view === 'login' && (
           <div className="max-w-sm mx-auto border-4 border-black p-6 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <h2 className="text-lg md:text-2xl font-black text-center mb-6 uppercase tracking-tighter italic">AUTHENTIFICATION</h2>
+            <h2 className="text-lg md:text-2xl font-black text-center mb-6 uppercase tracking-tighter italic">ACCÈS ADMINISTRATEUR</h2>
             <div className="space-y-3">
-              <input type="email" placeholder="EMAIL ADMIN" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} />
-              <input type="password" placeholder="MOT DE PASSE" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={adminPass} onChange={e => setAdminPass(e.target.value)} />
-              <button onClick={() => (adminEmail === "admin@gmail.com" && adminPass === "1234") ? setView('admin') : alert("Accès refusé")} className="w-full bg-black text-white font-black py-3 uppercase text-xs">ENTRER</button>
+              <input type="email" placeholder="IDENTIFIANT" className="w-full p-3 border-2 border-black font-black text-[10px] uppercase outline-none focus:ring-2 ring-red-500" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} />
+              <input type="password" placeholder="MOT DE PASSE" className="w-full p-3 border-2 border-black font-black text-[10px] uppercase outline-none focus:ring-2 ring-red-500" value={adminPass} onChange={e => setAdminPass(e.target.value)} />
+              <button onClick={() => (adminEmail === "admin@gmail.com" && adminPass === "1234") ? setView('admin') : alert("IDENTIFIANTS INCORRECTS")} className="w-full bg-black text-white font-black py-4 uppercase text-[10px] border-b-4 border-gray-700 active:translate-y-1 transition-all">CONNEXION AU CLOUD</button>
             </div>
           </div>
         )}
 
-        {/* ORDERS VIEW */}
+        {/* ORDERS VIEW (CLIENT) */}
         {view === 'my-orders' && (
           <div className="max-w-4xl mx-auto bg-white border-4 md:border-8 border-black p-4 md:p-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
-            <h2 className="text-xl md:text-3xl font-black mb-4 uppercase border-b-4 border-black pb-2">HISTORIQUE DES ACHATS</h2>
+            <h2 className="text-xl md:text-3xl font-black mb-4 uppercase border-b-4 border-black pb-2">MON HISTORIQUE</h2>
             {orders.length === 0 ? (
               <div className="text-center py-10">
                 <p className="font-black text-gray-400 uppercase mb-4 text-xs italic">AUCUNE COMMANDE TROUVÉE SUR CET APPAREIL.</p>
@@ -345,13 +391,13 @@ export default function App() {
               <div className="space-y-4">
                 {orders.map(o => (
                   <div key={`order-${o.id}`} className="border-2 border-black p-3 bg-gray-50 relative">
-                    <div className="absolute top-2 right-2 bg-yellow-400 px-2 py-0.5 text-[8px] font-black uppercase">En cours</div>
+                    <div className="absolute top-2 right-2 bg-yellow-400 px-2 py-0.5 text-[8px] font-black uppercase">En cours de traitement</div>
                     <div className="flex justify-between font-black text-[8px] md:text-xs border-b border-black pb-1 mb-2">
-                      <span>CMD#{o.id} - LE {o.date}</span>
+                      <span>CMD#{o.id.toString().slice(-6)} - LE {o.date}</span>
                       <span className="text-red-600 font-bold">{o.total.toLocaleString()} F</span>
                     </div>
                     <p className="text-[10px] md:text-xs font-bold uppercase truncate italic">{o.items.join(', ')}</p>
-                    <div className="mt-2 text-[8px] font-black text-gray-500 uppercase">Livraison à: {o.address}</div>
+                    <div className="mt-2 text-[8px] font-black text-gray-500 uppercase">Livraison : {o.address}</div>
                   </div>
                 ))}
               </div>
