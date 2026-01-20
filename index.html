@@ -3,8 +3,19 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yovo Mall - Vitrine Classique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yovo Mall - Lomé Togo</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#dc2626">
+    <meta name="description" content="Vente de produits de qualité supérieure à Lomé. Paiement sécurisé TMoney et Flooz.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Yovo Mall">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
 {
@@ -18,23 +29,19 @@
 }
 </script>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
       body {
         margin: 0;
         padding: 0;
-        background-color: #f0f0f0;
+        background-color: #f3f4f6;
+        font-family: 'JetBrains+Mono', monospace;
+        -webkit-tap-highlight-color: transparent;
       }
-      /* Style "Novice" : Bordures épaisses et contrastées */
-      .classic-border {
-        border: 4px solid #000;
-      }
-      .classic-border-heavy {
-        border: 8px solid #000;
-      }
+      html { scroll-behavior: smooth; }
     </style>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Chargement du code principal -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
