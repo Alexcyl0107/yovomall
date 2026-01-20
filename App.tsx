@@ -147,8 +147,9 @@ export default function App() {
 
       <main className="flex-grow container mx-auto p-3 md:p-8">
         {loading && (
-          <div className="fixed inset-0 bg-white/80 z-[100] flex items-center justify-center font-black uppercase italic animate-pulse">
-            Traitement en cours...
+          <div className="fixed inset-0 bg-white/80 z-[100] flex items-center justify-center font-black uppercase italic animate-pulse flex-col gap-2">
+            <div className="bg-black text-white px-4 py-2">SYNCHRONISATION CLOUD...</div>
+            <div className="text-[10px]">CLUSTER9 (MONGODB ATLAS)</div>
           </div>
         )}
 
@@ -285,10 +286,15 @@ export default function App() {
         {/* ADMIN DASHBOARD */}
         {view === 'admin' && (
           <div className="max-w-6xl mx-auto space-y-6">
-            <div className="bg-black text-white p-4 flex justify-between items-center border-b-8 border-red-600">
-              <h2 className="font-black uppercase text-xs md:text-base italic">CONSOLE DE GESTION MONGODB-SIM</h2>
+            <div className="bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center border-b-8 border-red-600 gap-4">
+              <div className="flex items-center gap-4">
+                <h2 className="font-black uppercase text-xs md:text-base italic">CONSOLE MONGODB</h2>
+                <span className="bg-green-500 text-black px-2 py-0.5 text-[10px] font-black animate-pulse rounded">ONLINE : {db.config.cluster}</span>
+              </div>
+              <div className="text-[9px] font-mono text-gray-400 break-all md:max-w-xs">{db.config.uri.substring(0, 30)}...</div>
               <button onClick={() => setView('home')} className="bg-red-600 px-4 py-1 font-black text-[8px] uppercase border border-white">QUITTER</button>
             </div>
+            
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white border-4 border-black p-4">
                 <h3 className="font-black mb-3 underline uppercase text-sm">NOUVEL ARTICLE</h3>
@@ -296,7 +302,9 @@ export default function App() {
                   <input type="text" placeholder="NOM DU PRODUIT" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={newProdName} onChange={e => setNewProdName(e.target.value)} required />
                   <input type="number" placeholder="PRIX (FCFA)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={newProdPrice} onChange={e => setNewProdPrice(e.target.value)} required />
                   <input type="text" placeholder="LIEN IMAGE" className="w-full p-2 border-2 border-black font-black text-[10px]" value={newProdImg} onChange={e => setNewProdImg(e.target.value)} required />
-                  <button className="w-full bg-blue-600 text-white font-black py-2 uppercase border-b-4 border-blue-900 text-xs">AJOUTER AU STOCK</button>
+                  <button className="w-full bg-blue-600 text-white font-black py-2 uppercase border-b-4 border-blue-900 text-xs flex items-center justify-center gap-2">
+                    PUSH VERS CLOUD
+                  </button>
                 </form>
               </div>
               <div className="bg-white border-4 border-black p-4 h-64 overflow-y-auto">
