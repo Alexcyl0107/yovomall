@@ -37,7 +37,6 @@ export default function App() {
 
   useEffect(() => {
     async function initData() {
-      setLoading(true);
       try {
         const p = await db.products.find();
         if (p.length === 0) {
@@ -56,8 +55,6 @@ export default function App() {
         setSearchHistory(h);
       } catch (err) {
         console.error("Erreur d'initialisation:", err);
-      } finally {
-        setLoading(false);
       }
     }
     initData();
@@ -146,12 +143,7 @@ export default function App() {
       </nav>
 
       <main className="flex-grow container mx-auto p-3 md:p-8">
-        {loading && (
-          <div className="fixed inset-0 bg-white/80 z-[100] flex items-center justify-center font-black uppercase italic animate-pulse flex-col gap-2">
-            <div className="bg-black text-white px-4 py-2">SYNCHRONISATION CLOUD...</div>
-            <div className="text-[10px]">CLUSTER9 (MONGODB ATLAS)</div>
-          </div>
-        )}
+        {/* L'overlay de chargement a été retiré ici pour satisfaire la demande */}
 
         {/* HOME VIEW */}
         {view === 'home' && (
@@ -183,14 +175,20 @@ export default function App() {
                 <div className="flex-grow h-1 md:h-2 bg-black"></div>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                {products.slice(0, 4).map(p => (
-                  <div key={`vedette-${p.id}`} className="bg-white border-2 md:border-4 border-black p-2 md:p-4 flex flex-col shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
-                    <img src={p.image} className="h-28 md:h-48 w-full object-cover border border-black mb-2 md:mb-4" alt={p.name} />
-                    <h4 className="font-black text-[10px] md:text-xs h-6 md:h-8 overflow-hidden uppercase leading-tight mb-1 md:mb-2">{p.name}</h4>
-                    <p className="text-red-600 font-black text-sm md:text-xl mb-2 md:mb-4">{p.price.toLocaleString()} F</p>
-                    <button onClick={() => addToCart(p)} className="bg-black text-white font-black py-2 md:py-3 text-[9px] md:text-xs border-b-2 md:border-b-4 border-gray-600 uppercase">AJOUTER</button>
-                  </div>
-                ))}
+                {products.length === 0 ? (
+                  Array(4).fill(0).map((_, i) => (
+                    <div key={i} className="h-48 bg-gray-200 animate-pulse border-2 border-black"></div>
+                  ))
+                ) : (
+                  products.slice(0, 4).map(p => (
+                    <div key={`vedette-${p.id}`} className="bg-white border-2 md:border-4 border-black p-2 md:p-4 flex flex-col shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                      <img src={p.image} className="h-28 md:h-48 w-full object-cover border border-black mb-2 md:mb-4" alt={p.name} />
+                      <h4 className="font-black text-[10px] md:text-xs h-6 md:h-8 overflow-hidden uppercase leading-tight mb-1 md:mb-2">{p.name}</h4>
+                      <p className="text-red-600 font-black text-sm md:text-xl mb-2 md:mb-4">{p.price.toLocaleString()} F</p>
+                      <button onClick={() => addToCart(p)} className="bg-black text-white font-black py-2 md:py-3 text-[9px] md:text-xs border-b-2 md:border-b-4 border-gray-600 uppercase">AJOUTER</button>
+                    </div>
+                  ))
+                )}
               </div>
             </section>
           </div>
@@ -266,7 +264,9 @@ export default function App() {
                   <input type="tel" placeholder="NUMÉRO DE PAIEMENT" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={payNum} onChange={e => setPayNum(e.target.value)} required />
                   <input type="password" placeholder="CODE SECRET (PIN)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={payCode} onChange={e => setPayCode(e.target.value)} required />
                   <textarea placeholder="ADRESSE DE LIVRAISON (LOMÉ)" className="w-full p-2 border-2 border-black font-black text-[10px] h-16 uppercase" value={address} onChange={e => setAddress(e.target.value)} required />
-                  <button className="w-full bg-green-600 text-white font-black py-4 text-lg border-b-8 border-green-900 uppercase hover:bg-green-700 transition-colors">CONFIRMER LA COMMANDE</button>
+                  <button className="w-full bg-green-600 text-white font-black py-4 text-lg border-b-8 border-green-900 uppercase hover:bg-green-700 transition-colors">
+                    {loading ? "TRAITEMENT..." : "CONFIRMER LA COMMANDE"}
+                  </button>
                 </form>
               </div>
             )}
@@ -289,7 +289,7 @@ export default function App() {
             <div className="bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center border-b-8 border-red-600 gap-4">
               <div className="flex items-center gap-4">
                 <h2 className="font-black uppercase text-xs md:text-base italic">CONSOLE MONGODB</h2>
-                <span className="bg-green-500 text-black px-2 py-0.5 text-[10px] font-black animate-pulse rounded">ONLINE : {db.config.cluster}</span>
+                <span className="bg-green-500 text-black px-2 py-0.5 text-[10px] font-black rounded">ONLINE : {db.config.cluster}</span>
               </div>
               <div className="text-[9px] font-mono text-gray-400 break-all md:max-w-xs">{db.config.uri.substring(0, 30)}...</div>
               <button onClick={() => setView('home')} className="bg-red-600 px-4 py-1 font-black text-[8px] uppercase border border-white">QUITTER</button>
@@ -303,7 +303,7 @@ export default function App() {
                   <input type="number" placeholder="PRIX (FCFA)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={newProdPrice} onChange={e => setNewProdPrice(e.target.value)} required />
                   <input type="text" placeholder="LIEN IMAGE" className="w-full p-2 border-2 border-black font-black text-[10px]" value={newProdImg} onChange={e => setNewProdImg(e.target.value)} required />
                   <button className="w-full bg-blue-600 text-white font-black py-2 uppercase border-b-4 border-blue-900 text-xs flex items-center justify-center gap-2">
-                    PUSH VERS CLOUD
+                    {loading ? "ENVOI EN COURS..." : "PUSH VERS CLOUD"}
                   </button>
                 </form>
               </div>
