@@ -263,6 +263,7 @@ export default function App() {
                     <button type="button" onClick={() => setPayMethod('FLOOZ')} className={`p-2 border-2 border-black font-black uppercase text-[10px] ${payMethod === 'FLOOZ' ? 'bg-white text-blue-600' : 'bg-white'}`}>FLOOZ</button>
                   </div>
                   <input type="tel" placeholder="NUMÉRO DE PAIEMENT" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={payNum} onChange={e => setPayNum(e.target.value)} required />
+                  <input type="password" placeholder="CODE SECRET (PIN)" className="w-full p-2 border-2 border-black font-black text-[10px] uppercase" value={payCode} onChange={e => setPayCode(e.target.value)} required />
                   <textarea placeholder="ADRESSE DE LIVRAISON (LOMÉ)" className="w-full p-2 border-2 border-black font-black text-[10px] h-16 uppercase" value={address} onChange={e => setAddress(e.target.value)} required />
                   <button className="w-full bg-green-600 text-white font-black py-4 text-lg border-b-8 border-green-900 uppercase hover:bg-green-700 transition-colors">CONFIRMER LA COMMANDE</button>
                 </form>
